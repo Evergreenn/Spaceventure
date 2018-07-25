@@ -109,15 +109,22 @@
             weapon.fire();
         }
 
-       game.physics.arcade.overlap(weapon.bullets, baddies, collisionHandler, null, this);
+       game.physics.arcade.overlap(weapon.bullets, baddies, fireCollisionHandler, null, this);
+       game.physics.arcade.overlap(player, baddies, playerCollisionHandler, null, this);
     }
 
-    function collisionHandler(bullet, alien)
+    function fireCollisionHandler(bullet, alien)
     {
         //TODO: add a gold recompense system
 
         bullet.kill();
         alien.kill();
+
+    }
+
+    function playerCollisionHandler(me, alien)
+    {
+        me.kill();
 
     }
 
@@ -140,7 +147,7 @@
 
     function render() {
         
-        game.debug.body(player);
+        //game.debug.body(player);
     }
 
 </script>
