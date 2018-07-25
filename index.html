@@ -28,11 +28,13 @@
         this.load.image('spaceship', 'assets/imgs/triangle.png');
         this.load.image('spaceBackground', 'assets/imgs/space.png');
         this.load.image('bullet', 'assets/imgs/bullet.png');
+        this.load.image('baddies', 'assets/imgs/baddies.png')
     }
 
     function create ()
     {
-        this.add.image(0, 0, 'spaceBackground');
+        this.background = this.add.tileSprite(0, 0, this.game.width, this.game.height, 'spaceBackground');
+        this.background.autoScroll(-40, 0);
 
 
         player = this.add.sprite(100, 300, 'spaceship');
