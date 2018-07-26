@@ -25,20 +25,21 @@
     let weapon;
     let fireButton;
     let baddies;
+    let explosions;
 
     function preload ()
     {
         this.load.image('spaceship', 'assets/imgs/triangle.png');
         this.load.image('spaceBackground', 'assets/imgs/space.png');
         this.load.image('bullet', 'assets/imgs/bullet.png');
-        this.load.image('baddies', 'assets/imgs/baddies.png')
+        this.load.image('baddies', 'assets/imgs/baddies.png');
+        this.load.image('kaboom', 'assets/imgs/explosion_orig.gif');
     }
 
     function create ()
     {
         this.background = this.add.tileSprite(0, 0, this.game.width, this.game.height, 'spaceBackground');
         this.background.autoScroll(-100, 0);
-
 
         baddies = game.add.group();
         baddies.enableBody = true;
@@ -60,6 +61,7 @@
         player.body.collideWorldBounds = true;
 
         cursors = this.input.keyboard.createCursorKeys();
+        fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
         weapon = game.add.weapon(40, 'bullet');
         weapon.bulletAngleOffset = 0;
@@ -71,7 +73,10 @@
         weapon.fireRate = FIRE_RATE;
         weapon.trackSprite(player, 140, 10);
 
-        fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+        explosions = game.add.group();
+        explosions.createMultiple(30, 'kaboom');
+        explosions.forEach(setupInvaders, this);
+
     }
 
     function update ()
@@ -117,6 +122,10 @@
     {
         //TODO: add a gold recompense system
 
+        let explosion = explosions.getFirstExists(false);
+        explosion.reset(alien.body.x, alien.body.y);
+        explosion.play('kaboom', 30, false, true);
+
         bullet.kill();
         alien.kill();
 
@@ -143,6 +152,13 @@
         }
 
         game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), launchBaddies);
+    }
+
+    function setupInvaders(invader)
+    {
+        invader.anchor.x = 0.5;
+        invader.anchor.y = 0.5;
+        invader.animations.add('kaboom');
     }
 
     function render() {
